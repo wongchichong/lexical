@@ -14,8 +14,8 @@ import invariant from 'shared/invariant';
 import {NO_DIRTY_NODES} from '../LexicalConstants';
 // import {getActiveEditor, isCurrentlyReadOnlyMode} from '../LexicalUpdates'; // To be removed
 // import {$getRoot} from '../LexicalUtils'; // Removed
-import {$isDecoratorNode} from './LexicalDecoratorNode';
-import {$isElementNode, ElementNode} from './LexicalElementNode';
+import {ElementNode} from './LexicalElementNode'; // Type import
+import {$isDecoratorNode, $isElementNode} from '../LexicalNodeChecks'; // Value imports
 
 export type SerializedRootNode<
   T extends SerializedLexicalNode = SerializedLexicalNode,
@@ -119,8 +119,4 @@ export function $createRootNode(): RootNode {
   return new RootNode();
 }
 
-export function $isRootNode(
-  node: RootNode | LexicalNode | null | undefined,
-): node is RootNode {
-  return node instanceof RootNode;
-}
+// $isRootNode has been moved to LexicalNodeChecks.ts

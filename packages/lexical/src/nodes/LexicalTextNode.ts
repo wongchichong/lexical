@@ -73,6 +73,7 @@ import {
 } from '../LexicalUtils';
 import {$createLineBreakNode} from './LexicalLineBreakNode';
 // import {$createTabNode} from './LexicalTabNode'; // Removed
+import { $isTextNode as $isTextNode_internal_check } from '../LexicalNodeChecks'; // Import for internal use
 
 export type SerializedTextNode = Spread<
   {
@@ -808,12 +809,9 @@ export class TextNode extends LexicalNode {
    * @returns this TextNode.
    */
   setTextContent(text: string): this {
-    if (this.__text === text) {
-      return this;
-    }
-    const self = this.getWritable();
-    self.__text = text;
-    return self;
+    invariant(false, 'TextNode.setTextContent() stub called. Implementation should be provided by augmentation.');
+    // @ts-ignore
+    return this;
   }
 
   /**
@@ -825,44 +823,9 @@ export class TextNode extends LexicalNode {
    * @returns the new RangeSelection.
    */
   select(_anchorOffset?: number, _focusOffset?: number): RangeSelection {
-    errorOnReadOnly();
-    let anchorOffset = _anchorOffset;
-    let focusOffset = _focusOffset;
-    const selection = $getSelection();
-    const text = this.getTextContent();
-    const key = this.__key;
-    if (typeof text === 'string') {
-      const lastOffset = text.length;
-      if (anchorOffset === undefined) {
-        anchorOffset = lastOffset;
-      }
-      if (focusOffset === undefined) {
-        focusOffset = lastOffset;
-      }
-    } else {
-      anchorOffset = 0;
-      focusOffset = 0;
-    }
-    if (!$isRangeSelection(selection)) {
-      return $internalMakeRangeSelection(
-        key,
-        anchorOffset,
-        key,
-        focusOffset,
-        'text',
-        'text',
-      );
-    } else {
-      const compositionKey = $getCompositionKey();
-      if (
-        compositionKey === selection.anchor.key ||
-        compositionKey === selection.focus.key
-      ) {
-        $setCompositionKey(key);
-      }
-      selection.setTextNodeRange(this, anchorOffset, this, focusOffset);
-    }
-    return selection;
+    invariant(false, 'TextNode.select() stub called. Implementation should be provided by augmentation.');
+    // @ts-ignore
+    return null;
   }
 
   selectStart(): RangeSelection {
@@ -1376,11 +1339,7 @@ export function $createTextNode(text = ''): TextNode {
   return $applyNodeReplacement(new TextNode(text));
 }
 
-export function $isTextNode(
-  node: LexicalNode | null | undefined,
-): node is TextNode {
-  return node instanceof TextNode;
-}
+// $isTextNode has been moved to LexicalNodeChecks.ts
 
 function applyTextFormatFromStyle(
   style: CSSStyleDeclaration,
@@ -1400,7 +1359,7 @@ function applyTextFormatFromStyle(
   const verticalAlign = style.verticalAlign;
 
   return (lexicalNode: LexicalNode) => {
-    if (!$isTextNode(lexicalNode)) {
+    if (!$isTextNode_internal_check(lexicalNode)) { // Use aliased import
       return lexicalNode;
     }
     if (hasBoldFontWeight && !lexicalNode.hasFormat('bold')) {

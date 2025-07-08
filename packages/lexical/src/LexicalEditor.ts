@@ -52,7 +52,8 @@ import {
   markNodesWithTypesAsDirty,
 } from './LexicalUtils'
 import { ArtificialNode__DO_NOT_USE } from './nodes/ArtificialNode'
-import { $isDecoratorNode, DecoratorNode } from './nodes/LexicalDecoratorNode'
+import { DecoratorNode } from './nodes/LexicalDecoratorNode' // Type import
+import { $isDecoratorNode } from './LexicalNodeChecks' // Value import
 import { LineBreakNode } from './nodes/LexicalLineBreakNode'
 import { ParagraphNode } from './nodes/LexicalParagraphNode'
 import { RootNode } from './nodes/LexicalRootNode'
@@ -673,6 +674,10 @@ export class LexicalEditor {
   _blockCursorElement: null | HTMLDivElement
   /** @internal */
   _createEditorArgs?: undefined | CreateEditorArgs
+
+  public static isLexicalEditor(editor: unknown): editor is LexicalEditor {
+    return editor instanceof LexicalEditor;
+  }
 
   /** @internal */
   constructor(

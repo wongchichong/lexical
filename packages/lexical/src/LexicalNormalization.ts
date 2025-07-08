@@ -10,8 +10,8 @@ import type { PointType, RangeSelection } from './LexicalSelection'
 
 import { nodeStatesAreEquivalent } from './LexicalNodeState'
 import { getActiveEditor } from './LexicalUpdates'
-import { $isTextNode, TextNode } from './nodes/LexicalTextNode'
-import { $isElementNode } from './nodes/LexicalElementNode'
+import { TextNode } from './nodes/LexicalTextNode' // Type import
+import { $isElementNode, $isTextNode } from './LexicalNodeChecks' // Corrected path
 
 function $canSimpleTextNodesBeMerged(
   node1: TextNode,

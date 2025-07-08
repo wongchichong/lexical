@@ -83,11 +83,7 @@ export function $createLineBreakNode(): LineBreakNode {
   return $applyNodeReplacement(new LineBreakNode());
 }
 
-export function $isLineBreakNode(
-  node: LexicalNode | null | undefined,
-): node is LineBreakNode {
-  return node instanceof LineBreakNode;
-}
+// $isLineBreakNode has been moved to LexicalNodeChecks.ts
 
 function isOnlyChildInBlockNode(node: Node): boolean {
   const parentElement = node.parentElement;

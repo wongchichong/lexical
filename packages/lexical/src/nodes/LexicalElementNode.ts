@@ -52,7 +52,8 @@ import {
   toggleTextFormatType,
 } from '../LexicalUtils'
 import { KlassConstructor, LexicalEditor, Spread } from '../LexicalEditor'
-import { $isTextNode, TextFormatType, TextNode } from './LexicalTextNode'
+import { TextFormatType, TextNode } from './LexicalTextNode' // Type import
+import { $isTextNode, $isElementNode as $isElementNode_internal_check } from '../LexicalNodeChecks' // Value import for $isTextNode and $isElementNode
 
 export type SerializedElementNode<
   T extends SerializedLexicalNode = SerializedLexicalNode,
@@ -413,10 +414,10 @@ export class ElementNode extends LexicalNode {
     const textNodes = []
     let child: LexicalNode | null = this.getFirstChild()
     while (child !== null) {
-      if ($isTextNode(child)) {
+      if ($isTextNode(child)) { // This $isTextNode is correctly imported from LexicalNodeChecks
         textNodes.push(child)
       }
-      if ($isElementNode(child)) {
+      if ($isElementNode_internal_check(child)) { // Use aliased import
         const subChildrenNodes = child.getAllTextNodes()
         textNodes.push(...subChildrenNodes)
       }
@@ -426,7 +427,7 @@ export class ElementNode extends LexicalNode {
   }
   getFirstDescendant<T extends LexicalNode>(): null | T {
     let node = this.getFirstChild<T>()
-    while ($isElementNode(node)) {
+    while ($isElementNode_internal_check(node)) {
       const child = node.getFirstChild<T>()
       if (child === null) {
         break
@@ -437,7 +438,7 @@ export class ElementNode extends LexicalNode {
   }
   getLastDescendant<T extends LexicalNode>(): null | T {
     let node = this.getLastChild<T>()
-    while ($isElementNode(node)) {
+    while ($isElementNode_internal_check(node)) {
       const child = node.getLastChild<T>()
       if (child === null) {
         break
@@ -454,14 +455,14 @@ export class ElementNode extends LexicalNode {
     if (index >= childrenLength) {
       const resolvedNode = children[childrenLength - 1]
       return (
-        ($isElementNode(resolvedNode) && resolvedNode.getLastDescendant()) ||
+        ($isElementNode_internal_check(resolvedNode) && resolvedNode.getLastDescendant()) ||
         resolvedNode ||
         null
       )
     }
     const resolvedNode = children[index]
     return (
-      ($isElementNode(resolvedNode) && resolvedNode.getFirstDescendant()) ||
+      ($isElementNode_internal_check(resolvedNode) && resolvedNode.getFirstDescendant()) ||
       resolvedNode ||
       null
     )
@@ -527,7 +528,7 @@ export class ElementNode extends LexicalNode {
       const child = children[i]
       textContent += child.getTextContent()
       if (
-        $isElementNode(child) &&
+        $isElementNode_internal_check(child) && // Use aliased import
         i !== childrenLength - 1 &&
         !child.isInline()
       ) {
@@ -544,7 +545,7 @@ export class ElementNode extends LexicalNode {
       const child = children[i]
       textContentSize += child.getTextContentSize()
       if (
-        $isElementNode(child) &&
+        $isElementNode_internal_check(child) && // Use aliased import
         i !== childrenLength - 1 &&
         !child.isInline()
       ) {
@@ -591,49 +592,9 @@ export class ElementNode extends LexicalNode {
   // Mutators
 
   select(_anchorOffset?: number, _focusOffset?: number): RangeSelection {
-    errorOnReadOnly()
-    const selection = $getSelection()
-    let anchorOffset = _anchorOffset
-    let focusOffset = _focusOffset
-    const childrenCount = this.getChildrenSize()
-    if (!this.canBeEmpty()) {
-      if (_anchorOffset === 0 && _focusOffset === 0) {
-        const firstChild = this.getFirstChild()
-        if ($isTextNode(firstChild) || $isElementNode(firstChild)) {
-          return firstChild.select(0, 0)
-        }
-      } else if (
-        (_anchorOffset === undefined || _anchorOffset === childrenCount) &&
-        (_focusOffset === undefined || _focusOffset === childrenCount)
-      ) {
-        const lastChild = this.getLastChild()
-        if ($isTextNode(lastChild) || $isElementNode(lastChild)) {
-          return lastChild.select()
-        }
-      }
-    }
-    if (anchorOffset === undefined) {
-      anchorOffset = childrenCount
-    }
-    if (focusOffset === undefined) {
-      focusOffset = childrenCount
-    }
-    const key = this.__key
-    if (!$isRangeSelection(selection)) {
-      return $internalMakeRangeSelection(
-        key,
-        anchorOffset,
-        key,
-        focusOffset,
-        'element',
-        'element',
-      )
-    } else {
-      selection.anchor.set(key, anchorOffset, 'element')
-      selection.focus.set(key, focusOffset, 'element')
-      selection.dirty = true
-    }
-    return selection
+    invariant(false, 'ElementNode.select() stub called. Implementation should be provided by augmentation.');
+    // @ts-ignore
+    return null;
   }
   selectStart(): RangeSelection {
     const firstNode = this.getFirstDescendant()
@@ -998,11 +959,7 @@ export class ElementNode extends LexicalNode {
   }
 }
 
-export function $isElementNode(
-  node: LexicalNode | null | undefined,
-): node is ElementNode {
-  return node instanceof ElementNode
-}
+// $isElementNode has been moved to LexicalNodeChecks.ts
 
 function isPointRemoved(
   point: PointType,

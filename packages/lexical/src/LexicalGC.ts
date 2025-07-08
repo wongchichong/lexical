@@ -11,7 +11,8 @@ import type { EditorState } from './LexicalEditorState'
 import type { NodeKey, NodeMap } from './LexicalNode'
 
 import { cloneDecorators } from './LexicalUtils'
-import { $isElementNode, ElementNode } from './nodes/LexicalElementNode'
+import { ElementNode } from './nodes/LexicalElementNode' // Type import
+import { $isElementNode } from './LexicalNodeChecks' // Value import
 
 export function $garbageCollectDetachedDecorators(
   editor: LexicalEditor,

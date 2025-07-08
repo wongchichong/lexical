@@ -28,7 +28,7 @@ import {
   type PointType,
   type RangeSelection,
 } from './LexicalSelection'
-import { $isRootNode, type RootNode } from './nodes/LexicalRootNode'
+import { type RootNode } from './nodes/LexicalRootNode' // $isRootNode removed, type RootNode remains
 
 import { CAN_USE_DOM } from 'shared/canUseDOM'
 import { IS_APPLE, IS_APPLE_WEBKIT, IS_IOS, IS_SAFARI } from 'shared/environment'
@@ -64,7 +64,7 @@ import {
   RTL_REGEX,
   TEXT_TYPE_TO_FORMAT,
 } from './LexicalConstants'
-import { LexicalEditor } from './LexicalEditor'
+import { LexicalEditor } from './LexicalEditor'; // Re-added LexicalEditor class import
 import { flushRootMutations } from './LexicalMutations'
 import {
   LexicalNode,
@@ -82,12 +82,21 @@ import {
   isCurrentlyReadOnlyMode,
   triggerCommandListeners,
 } from './LexicalUpdates'
-import { $createTextNode, $isTextNode, type TextFormatType, TextNode } from './nodes/LexicalTextNode'
-import { $isDecoratorNode, DecoratorNode } from './nodes/LexicalDecoratorNode'
-import { $isElementNode, ElementNode } from './nodes/LexicalElementNode'
-import { $isLineBreakNode, LineBreakNode } from './nodes/LexicalLineBreakNode'
+import { $createTextNode, type TextFormatType, TextNode } from './nodes/LexicalTextNode' // Factory and Type
+import { DecoratorNode } from './nodes/LexicalDecoratorNode' // Type
+import { ElementNode } from './nodes/LexicalElementNode' // Type
+import { LineBreakNode } from './nodes/LexicalLineBreakNode' // Type
+// $isRootNode is imported from LexicalNodeChecks below
+import {
+  $isDecoratorNode,
+  $isElementNode,
+  $isLineBreakNode,
+  $isRootNode,
+  $isTextNode,
+  $isTabNode
+} from './LexicalNodeChecks' // Corrected path
 import { HISTORY_MERGE_TAG, UpdateTag } from './LexicalUpdateTags'
-import { $isTabNode } from './nodes/LexicalTabNode'
+// $isTabNode is now imported from LexicalNodeChecks
 
 export const emptyFunction = () => {
   return
@@ -192,10 +201,11 @@ export function isSelectionWithinEditor(
 /**
  * @returns true if the given argument is a LexicalEditor instance from this build of Lexical
  */
-export function isLexicalEditor(editor: unknown): editor is LexicalEditor {
-  // Check instanceof to prevent issues with multiple embedded Lexical installations
-  return editor instanceof LexicalEditor
-}
+// export function isLexicalEditor(editor: unknown): editor is LexicalEditor {
+//   // Check instanceof to prevent issues with multiple embedded Lexical installations
+//   return editor instanceof LexicalEditor
+// }
+// This function has been moved to LexicalEditor.isLexicalEditor as a static method.
 
 export function getNearestEditorFromDOMNode(
   node: Node | null,
@@ -203,7 +213,8 @@ export function getNearestEditorFromDOMNode(
   let currentNode = node
   while (currentNode != null) {
     const editor = getEditorPropertyFromDOMNode(currentNode)
-    if (isLexicalEditor(editor)) {
+    // Updated to use LexicalEditor.isLexicalEditor
+    if (LexicalEditor.isLexicalEditor(editor)) {
       return editor
     }
     currentNode = getParentElement(currentNode)

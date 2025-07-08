@@ -29,8 +29,8 @@ import {
   isFirefoxClipboardEvents,
   isHTMLElement,
 } from './LexicalUtils'
-import { $isTextNode, TextNode } from './nodes/LexicalTextNode'
-import { $isDecoratorNode } from './nodes/LexicalDecoratorNode'
+import { TextNode } from './nodes/LexicalTextNode' // Type import
+import { $isTextNode, $isDecoratorNode } from './LexicalNodeChecks' // Corrected path
 // The time between a text entry event and the mutation observer firing.
 const TEXT_MUTATION_VARIANCE = 100
 

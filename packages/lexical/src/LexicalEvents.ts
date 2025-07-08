@@ -6,10 +6,12 @@
  *
  */
 
-import type { LexicalEditor } from './LexicalEditor'
+import { LexicalEditor } from './LexicalEditor' // Changed to value import
 import type { NodeKey } from './LexicalNode'
-import { $isElementNode, type ElementNode } from './nodes/LexicalElementNode'
-import { $isTextNode, type TextNode } from './nodes/LexicalTextNode'
+import { type ElementNode } from './nodes/LexicalElementNode' // $isElementNode will come from LexicalNodeChecks
+import { type TextNode } from './nodes/LexicalTextNode' // $isTextNode will come from LexicalNodeChecks
+import { $isElementNode, $isTextNode, $isDecoratorNode, $isRootNode } from './LexicalNodeChecks' // Corrected path, added more imports that were likely missed from original diff
+
 
 import {
   CAN_USE_BEFORE_INPUT,
@@ -113,7 +115,7 @@ import {
   isFirefoxClipboardEvents,
   isHTMLElement,
   isItalic,
-  isLexicalEditor,
+  // isLexicalEditor, // Removed from LexicalUtils import
   isLineBreak,
   isModifier,
   isMoveBackward,
@@ -132,8 +134,7 @@ import {
   isUnderline,
   isUndo,
 } from './LexicalUtils'
-import { $isRootNode } from './nodes/LexicalRootNode'
-import { $isDecoratorNode } from './nodes/LexicalDecoratorNode'
+// $isRootNode and $isDecoratorNode are now imported from LexicalNodeChecks via the earlier consolidated import
 
 type RootElementRemoveHandles = Array<() => void>
 type RootElementEvents = Array<
@@ -1445,7 +1446,7 @@ export function removeRootElementEvents(rootElement: HTMLElement): void {
 
   const editor = getEditorPropertyFromDOMNode(rootElement)
 
-  if (isLexicalEditor(editor)) {
+  if (LexicalEditor.isLexicalEditor(editor)) { // Changed to LexicalEditor.isLexicalEditor
     cleanActiveNestedEditorsMap(editor)
     // @ts-expect-error: internal field
     rootElement.__lexicalEditor = null

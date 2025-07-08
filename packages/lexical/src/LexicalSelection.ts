@@ -9,8 +9,9 @@
 import type { LexicalEditor } from './LexicalEditor'
 import type { EditorState } from './LexicalEditorState'
 import type { NodeKey } from './LexicalNode'
-import { $isElementNode, type ElementNode } from './nodes/LexicalElementNode'
-import { $createTextNode, $isTextNode, type TextFormatType, type TextNode } from './nodes/LexicalTextNode'
+import { type ElementNode } from './nodes/LexicalElementNode' // Type import
+import { $createTextNode, type TextFormatType, type TextNode } from './nodes/LexicalTextNode' // Factory and Type imports
+// Value imports for type guards will be moved below
 
 import invariant from 'shared/invariant'
 
@@ -92,13 +93,20 @@ import {
   scrollIntoViewIfNeeded,
   toggleTextFormatType,
 } from './LexicalUtils'
-import { $createTabNode, $isTabNode } from './nodes/LexicalTabNode'
+import { $createTabNode } from './nodes/LexicalTabNode' // Factory import
+import { RootNode } from './nodes/LexicalRootNode' // Type import
+import { $createParagraphNode } from './nodes/LexicalParagraphNode' // Factory import
+import { $createLineBreakNode } from './nodes/LexicalLineBreakNode' // Factory import
+import {
+  $isElementNode,
+  $isTextNode,
+  $isTabNode,
+  $isRootNode,
+  $isDecoratorNode,
+  $isLineBreakNode
+} from './LexicalNodeChecks' // Corrected path
 import { $caretFromPoint, $caretRangeFromSelection, $getCaretRangeInDirection, $isExtendableTextPointCaret, $normalizeCaret, $removeTextFromCaretRange, $rewindSiblingCaret, $setPointFromCaret, $setSelectionFromCaretRange, $updateRangeSelectionFromCaretRange } from './caret/LexicalCaretUtils'
 import { $comparePointCaretNext, $extendCaretToRange, $getAdjacentChildCaret, $getCaretRange, $getChildCaret, $getSiblingCaret, $isChildCaret, $isSiblingCaret, $isTextPointCaret, CaretRange, ChildCaret, NodeCaret, PointCaret } from './caret/LexicalCaret'
-import { $isRootNode, RootNode } from './nodes/LexicalRootNode' // Import RootNode
-import { $createParagraphNode } from './nodes/LexicalParagraphNode'
-import { $isDecoratorNode } from './nodes/LexicalDecoratorNode'
-import { $createLineBreakNode, $isLineBreakNode } from './nodes/LexicalLineBreakNode'
 import { COLLABORATION_TAG, SKIP_SCROLL_INTO_VIEW_TAG } from './LexicalUpdateTags'
 
 export type TextPointType = {
@@ -174,13 +182,9 @@ export class Point {
   }
 
   getNode(): LexicalNode {
-    const key = this.key
-    const editorState = getActiveEditorState()
-    const node = editorState._nodeMap.get(key) as LexicalNode | undefined
-    if (node === undefined) {
-      invariant(false, 'Point.getNode: node not found')
-    }
-    return node
+    invariant(false, 'Point.getNode() stub called. Implementation should be provided by augmentation.');
+    // @ts-ignore
+    return null;
   }
 
   set(
@@ -189,39 +193,7 @@ export class Point {
     type: 'text' | 'element',
     onlyIfChanged?: boolean,
   ): void {
-    const selection = this._selection
-    const oldKey = this.key
-    if (
-      onlyIfChanged &&
-      this.key === key &&
-      this.offset === offset &&
-      this.type === type
-    ) {
-      return
-    }
-    this.key = key
-    this.offset = offset
-    this.type = type
-    if (__DEV__) {
-      const editorState = getActiveEditorState()
-      const node = editorState._nodeMap.get(key) as LexicalNode | undefined
-      invariant(
-        type === 'text' ? $isTextNode(node) : $isElementNode(node),
-        'PointType.set: node with key %s is %s and can not be used for a %s point',
-        key,
-        node ? node.__type : '[not found]',
-        type,
-      )
-    }
-    if (!isCurrentlyReadOnlyMode()) {
-      if ($getCompositionKey() === oldKey) {
-        $setCompositionKey(key)
-      }
-      if (selection !== null) {
-        selection.setCachedNodes(null)
-        selection.dirty = true
-      }
-    }
+    invariant(false, 'Point.set() stub called. Implementation should be provided by augmentation.');
   }
 }
 
@@ -420,23 +392,8 @@ export class NodeSelection implements BaseSelection {
   }
 
   getNodes(): Array<LexicalNode> {
-    const cachedNodes = this._cachedNodes
-    if (cachedNodes !== null) {
-      return cachedNodes
-    }
-    const editorState = getActiveEditorState()
-    const objects = this._nodes
-    const nodes = []
-    for (const object of objects) {
-      const node = editorState._nodeMap.get(object) as LexicalNode | undefined
-      if (node !== undefined) {
-        nodes.push(node)
-      }
-    }
-    if (!isCurrentlyReadOnlyMode()) {
-      this._cachedNodes = nodes
-    }
-    return nodes
+    invariant(false, 'NodeSelection.getNodes() stub called. Implementation should be provided by augmentation.');
+    return [];
   }
 
   getTextContent(): string {
@@ -707,8 +664,7 @@ export class RangeSelection implements BaseSelection {
    * @param format a string TextFormatType to toggle on the TextNodes in the selection
    */
   toggleFormat(format: TextFormatType): void {
-    this.format = toggleTextFormatType(this.format, format, null)
-    this.dirty = true
+    invariant(false, 'RangeSelection.toggleFormat() stub called. Implementation should be provided by augmentation.');
   }
 
   /**
@@ -1177,144 +1133,7 @@ export class RangeSelection implements BaseSelection {
     formatType: TextFormatType,
     alignWithFormat: number | null = null,
   ): void {
-    if (this.isCollapsed()) {
-      this.toggleFormat(formatType)
-      // When changing format, we should stop composition
-      $setCompositionKey(null)
-      return
-    }
-
-    const selectedNodes = this.getNodes()
-    const selectedTextNodes: Array<TextNode> = []
-    for (const selectedNode of selectedNodes) {
-      if ($isTextNode(selectedNode)) {
-        selectedTextNodes.push(selectedNode)
-      }
-    }
-    const applyFormatToElements = (alignWith: number | null) => {
-      selectedNodes.forEach((node) => {
-        if ($isElementNode(node)) {
-          const newFormat = node.getFormatFlags(formatType, alignWith)
-          node.setTextFormat(newFormat)
-        }
-      })
-    }
-
-    const selectedTextNodesLength = selectedTextNodes.length
-    if (selectedTextNodesLength === 0) {
-      this.toggleFormat(formatType)
-      // When changing format, we should stop composition
-      $setCompositionKey(null)
-      applyFormatToElements(alignWithFormat)
-      return
-    }
-
-    const anchor = this.anchor
-    const focus = this.focus
-    const isBackward = this.isBackward()
-    const startPoint = isBackward ? focus : anchor
-    const endPoint = isBackward ? anchor : focus
-
-    let firstIndex = 0
-    let firstNode = selectedTextNodes[0]
-    let startOffset = startPoint.type === 'element' ? 0 : startPoint.offset
-
-    // In case selection started at the end of text node use next text node
-    if (
-      startPoint.type === 'text' &&
-      startOffset === firstNode.getTextContentSize()
-    ) {
-      firstIndex = 1
-      firstNode = selectedTextNodes[1]
-      startOffset = 0
-    }
-
-    if (firstNode == null) {
-      return
-    }
-
-    const firstNextFormat = firstNode.getFormatFlags(
-      formatType,
-      alignWithFormat,
-    )
-    applyFormatToElements(firstNextFormat)
-
-    const lastIndex = selectedTextNodesLength - 1
-    let lastNode = selectedTextNodes[lastIndex]
-    const endOffset =
-      endPoint.type === 'text'
-        ? endPoint.offset
-        : lastNode.getTextContentSize()
-
-    // Single node selected
-    if (firstNode.is(lastNode)) {
-      // No actual text is selected, so do nothing.
-      if (startOffset === endOffset) {
-        return
-      }
-      // The entire node is selected or it is token, so just format it
-      if (
-        $isTokenOrSegmented(firstNode) ||
-        (startOffset === 0 && endOffset === firstNode.getTextContentSize())
-      ) {
-        firstNode.setFormat(firstNextFormat)
-      } else {
-        // Node is partially selected, so split it into two nodes
-        // add style the selected one.
-        const splitNodes = firstNode.splitText(startOffset, endOffset)
-        const replacement = startOffset === 0 ? splitNodes[0] : splitNodes[1]
-        replacement.setFormat(firstNextFormat)
-
-        // Update selection only if starts/ends on text node
-        if (startPoint.type === 'text') {
-          startPoint.set(replacement.__key, 0, 'text')
-        }
-        if (endPoint.type === 'text') {
-          endPoint.set(replacement.__key, endOffset - startOffset, 'text')
-        }
-      }
-
-      this.format = firstNextFormat
-
-      return
-    }
-    // Multiple nodes selected
-    // The entire first node isn't selected, so split it
-    if (startOffset !== 0 && !$isTokenOrSegmented(firstNode)) {
-      [, firstNode as TextNode] = firstNode.splitText(startOffset)
-      startOffset = 0
-    }
-    firstNode.setFormat(firstNextFormat)
-
-    const lastNextFormat = lastNode.getFormatFlags(formatType, firstNextFormat)
-    // If the offset is 0, it means no actual characters are selected,
-    // so we skip formatting the last node altogether.
-    if (endOffset > 0) {
-      if (
-        endOffset !== lastNode.getTextContentSize() &&
-        !$isTokenOrSegmented(lastNode)
-      ) {
-        [lastNode as TextNode] = lastNode.splitText(endOffset)
-      }
-      lastNode.setFormat(lastNextFormat)
-    }
-
-    // Process all text nodes in between
-    for (let i = firstIndex + 1; i < lastIndex; i++) {
-      const textNode = selectedTextNodes[i]
-      const nextFormat = textNode.getFormatFlags(formatType, lastNextFormat)
-      textNode.setFormat(nextFormat)
-    }
-
-    // Update selection only if starts/ends on text node
-    if (startPoint.type === 'text') {
-      startPoint.set(firstNode.__key, startOffset, 'text')
-    }
-    if (endPoint.type === 'text') {
-      endPoint.set(lastNode.__key, endOffset, 'text')
-    }
-
-    this.format = firstNextFormat | lastNextFormat
+    invariant(false, 'RangeSelection.formatText() stub called. Implementation should be provided by augmentation.');
   }
 
   /**

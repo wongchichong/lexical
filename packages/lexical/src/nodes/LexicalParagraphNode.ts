@@ -31,7 +31,7 @@ import {
   setNodeIndentFromDOM,
 } from '../LexicalUtils';
 import {ElementNode} from './LexicalElementNode';
-import {$isTextNode} from './LexicalTextNode';
+import {$isTextNode} from '../LexicalNodeChecks'; // Corrected path
 
 export type SerializedParagraphNode = Spread<
   {
@@ -168,8 +168,4 @@ export function $createParagraphNode(): ParagraphNode {
   return $applyNodeReplacement(new ParagraphNode());
 }
 
-export function $isParagraphNode(
-  node: LexicalNode | null | undefined,
-): node is ParagraphNode {
-  return node instanceof ParagraphNode;
-}
+// $isParagraphNode has been moved to LexicalNodeChecks.ts

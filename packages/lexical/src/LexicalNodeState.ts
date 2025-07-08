@@ -9,10 +9,11 @@
 import invariant from 'shared/invariant'
 
 import { NODE_STATE_KEY, PROTOTYPE_CONFIG_METHOD } from './LexicalConstants'
-import { errorOnReadOnly, getActiveEditor } from './LexicalUpdates' // Import getActiveEditor
-import { getRegisteredNodeOrThrow, getStaticNodeConfig } from './LexicalUtils' // Remove $getEditor
-import { Klass, LexicalEditor, LexicalNodeConfig, Spread } from './LexicalEditor' // Add LexicalEditor for type
+// Removed: import { errorOnReadOnly, getActiveEditor } from './LexicalUpdates'
+import { getRegisteredNodeOrThrow, getStaticNodeConfig } from './LexicalUtils'
+import { Klass, LexicalEditor, LexicalNodeConfig, Spread } from './LexicalEditor'
 import { LexicalNode, StaticNodeConfigRecord } from './LexicalNode'
+import { $getWritableNodeState as getWritableNodeStateFromAugmentation } from './LexicalNodeStateAugmentation';
 
 /**
  * Get the value type (V) from a StateConfig
@@ -377,32 +378,8 @@ export function $getStateChange<T extends LexicalNode, K extends string, V>(
  *
  * @param node The LexicalNode to set the state on
  * @param stateConfig The configuration for this state
- * @param valueOrUpdater The value or updater function
- * @returns node
- */
-export function $setState<Node extends LexicalNode, K extends string, V>(
-  node: Node,
-  stateConfig: StateConfig<K, V>,
-  valueOrUpdater: ValueOrUpdater<V>,
-): Node {
-  errorOnReadOnly()
-  let value: V
-  if (typeof valueOrUpdater === 'function') {
-    const latest = node.getLatest()
-    const prevValue = $getState(latest, stateConfig)
-    value = (valueOrUpdater as (v: V) => V)(prevValue)
-    if (stateConfig.isEqual(prevValue, value)) {
-      return latest
-    }
-  } else {
-    value = valueOrUpdater
-  }
-  const writable = node.getWritable()
-  const state = $getWritableNodeState(writable)
-  $checkCollision(node, stateConfig, state)
-  state.updateFromKnown(stateConfig, value)
-  return writable
-}
+// The entire $setState function block has been moved to LexicalNodeStateAugmentation.ts
+// A previous attempt to remove it only added a comment. This ensures the function body is removed.
 
 /**
  * @internal
@@ -410,7 +387,7 @@ export function $setState<Node extends LexicalNode, K extends string, V>(
  * Register the config to this node's sharedConfigMap and throw an exception in
  * `__DEV__` when a collision is detected.
  */
-function $checkCollision<Node extends LexicalNode, K extends string, V>(
+export function $checkCollision<Node extends LexicalNode, K extends string, V>(
   node: Node,
   stateConfig: StateConfig<K, V>,
   state: NodeState<Node>,
@@ -767,24 +744,7 @@ export class NodeState<T extends LexicalNode> {
   }
 }
 
-/**
- * @internal
- *
- * Only for direct use in very advanced integrations, such as lexical-yjs.
- * Typically you would only use {@link createState}, {@link $getState}, and
- * {@link $setState}. This is effectively the preamble for {@link $setState}.
- */
-export function $getWritableNodeState<T extends LexicalNode>(
-  node: T,
-): NodeState<T> {
-  const writable = node.getWritable()
-  const editor = getActiveEditor() // Get editor instance
-  const state = writable.__state
-    ? writable.__state.getWritable(writable)
-    : new NodeState(writable, $getSharedNodeState(writable, editor)) // Pass editor
-  writable.__state = state
-  return state
-}
+// Removed $getWritableNodeState as it's moved to LexicalNodeStateAugmentation.ts
 
 /**
  * @internal
@@ -814,7 +774,7 @@ export function $updateStateFromJSON<T extends LexicalNode>(
 ): T {
   const writable = node.getWritable()
   if (unknownState || writable.__state) {
-    $getWritableNodeState(node).updateFromJSON(unknownState)
+    getWritableNodeStateFromAugmentation(node).updateFromJSON(unknownState)
   }
   return writable
 }

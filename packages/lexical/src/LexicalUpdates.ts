@@ -60,14 +60,15 @@ import {
   getRegisteredNodeOrThrow,
   getWindow,
   internalMarkNodeAsDirty,
-  isLexicalEditor,
+  // isLexicalEditor, // Removed: Will use LexicalEditor.isLexicalEditor directly
   removeDOMBlockCursorElement,
   scheduleMicroTask,
   setPendingNodeToClone,
   updateDOMBlockCursorElement,
 } from './LexicalUtils'
-import { $isTextNode } from './nodes/LexicalTextNode'
-import { $isElementNode, ElementNode } from './nodes/LexicalElementNode'
+// import { $isTextNode } from './nodes/LexicalTextNode' // Moved
+import { ElementNode } from './nodes/LexicalElementNode' // Type import
+import { $isTextNode, $isElementNode } from './LexicalNodeChecks' // Corrected path
 import { SKIP_DOM_SELECTION_TAG } from './LexicalUpdateTags'
 import { SELECTION_CHANGE_COMMAND } from './LexicalCommands'
 
@@ -141,7 +142,7 @@ function collectBuildInformation(): string {
   if (typeof window !== 'undefined') {
     for (const node of document.querySelectorAll('[contenteditable]')) {
       const editor = getEditorPropertyFromDOMNode(node)
-      if (isLexicalEditor(editor)) {
+      if (LexicalEditor.isLexicalEditor(editor)) { // Changed to LexicalEditor.isLexicalEditor
         compatibleEditors++
       } else if (editor) {
         let version = String(

@@ -11,9 +11,9 @@ import devInvariant from 'shared/devInvariant';
 import invariant from 'shared/invariant';
 
 import {$getRoot, $isRootOrShadowRoot} from '../LexicalUtils';
-import {$isElementNode, ElementNode} from '../nodes/LexicalElementNode';
-import {$isRootNode} from '../nodes/LexicalRootNode';
-import {TextNode} from '../nodes/LexicalTextNode';
+import {ElementNode} from '../nodes/LexicalElementNode'; // Type import
+import {TextNode} from '../nodes/LexicalTextNode'; // Type import
+import {$isElementNode, $isRootNode} from '../LexicalNodeChecks'; // Value imports
 
 /**
  * The direction of a caret, 'next' points towards the end of the document

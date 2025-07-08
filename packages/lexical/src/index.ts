@@ -192,8 +192,8 @@ export { buildImportMap } from './LexicalNode'
 export {
   $getState,
   $getStateChange,
-  $getWritableNodeState,
-  $setState,
+  // $getWritableNodeState, // Removed from here
+  // $setState,             // Removed from here
   type AnyStateConfig,
   createSharedNodeState,
   createState,
@@ -205,6 +205,11 @@ export {
   type StateValueOrUpdater,
   type ValueOrUpdater,
 } from './LexicalNodeState'
+
+export {
+  $getWritableNodeState,
+  $setState,
+} from './LexicalNodeStateAugmentation' // Added new export
 export { $normalizeSelection as $normalizeSelection__EXPERIMENTAL } from './LexicalNormalization'
 export type {
   BaseSelection,
@@ -275,7 +280,7 @@ export {
   isHTMLAnchorElement,
   isHTMLElement,
   isInlineDomNode,
-  isLexicalEditor,
+  // isLexicalEditor, // Removed: isLexicalEditor is now a static method LexicalEditor.isLexicalEditor
   isModifierMatch,
   isSelectionCapturedInDecoratorInput,
   isSelectionWithinEditor,
@@ -285,35 +290,44 @@ export {
   setNodeIndentFromDOM,
 } from './LexicalUtils'
 export { ArtificialNode__DO_NOT_USE } from './nodes/ArtificialNode'
-export { $isDecoratorNode, DecoratorNode } from './nodes/LexicalDecoratorNode'
+export { DecoratorNode } from './nodes/LexicalDecoratorNode' // $isDecoratorNode moved
 export type {
   ElementDOMSlot,
   ElementFormatType,
   SerializedElementNode,
 } from './nodes/LexicalElementNode'
-export { $isElementNode, ElementNode } from './nodes/LexicalElementNode'
+export { ElementNode } from './nodes/LexicalElementNode' // $isElementNode moved
 export type { SerializedLineBreakNode } from './nodes/LexicalLineBreakNode'
 export {
   $createLineBreakNode,
-  $isLineBreakNode,
   LineBreakNode,
-} from './nodes/LexicalLineBreakNode'
+} from './nodes/LexicalLineBreakNode' // $isLineBreakNode moved
 export type { SerializedParagraphNode } from './nodes/LexicalParagraphNode'
 export {
   $createParagraphNode,
-  $isParagraphNode,
   ParagraphNode,
-} from './nodes/LexicalParagraphNode'
+} from './nodes/LexicalParagraphNode' // $isParagraphNode moved
 export type { SerializedRootNode } from './nodes/LexicalRootNode'
-export { $isRootNode, RootNode } from './nodes/LexicalRootNode'
+export { RootNode } from './nodes/LexicalRootNode' // $isRootNode moved
 export type { SerializedTabNode } from './nodes/LexicalTabNode'
-export { $createTabNode, $isTabNode, TabNode } from './nodes/LexicalTabNode'
+export { $createTabNode, TabNode } from './nodes/LexicalTabNode' // $isTabNode moved
 export type {
   SerializedTextNode,
   TextFormatType,
   TextModeType,
 } from './nodes/LexicalTextNode'
-export { $createTextNode, $isTextNode, TextNode } from './nodes/LexicalTextNode'
+export { $createTextNode, TextNode } from './nodes/LexicalTextNode' // $isTextNode moved
+
+// Export type guards from LexicalNodeChecks
+export {
+  $isDecoratorNode,
+  $isElementNode,
+  $isLineBreakNode,
+  $isParagraphNode,
+  $isRootNode,
+  $isTabNode,
+  $isTextNode
+} from './LexicalNodeChecks'
 
 // Update Tags
 export {

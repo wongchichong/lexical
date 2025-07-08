@@ -50,10 +50,16 @@ import {
   internalMarkNodeAsDirty,
   removeFromParent,
 } from './LexicalUtils'
-import { $isRootNode, RootNode } from './nodes/LexicalRootNode'
-import { $isTextNode, TextNode } from './nodes/LexicalTextNode'
-import { $isDecoratorNode, DecoratorNode } from './nodes/LexicalDecoratorNode'
-import { $isElementNode, ElementNode } from './nodes/LexicalElementNode'
+import { RootNode } from './nodes/LexicalRootNode' // Type import remains
+import { TextNode } from './nodes/LexicalTextNode' // Type import remains
+import { DecoratorNode } from './nodes/LexicalDecoratorNode' // Type import remains
+import { ElementNode } from './nodes/LexicalElementNode' // Type import remains
+import {
+  $isRootNode,
+  $isTextNode,
+  $isDecoratorNode,
+  $isElementNode
+} from './LexicalNodeChecks' // Corrected path
 import { $getCommonAncestor, $getCommonAncestorResultBranchOrder } from './caret/LexicalCaret'
 import { $createParagraphNode } from './nodes/LexicalParagraphNode'
 

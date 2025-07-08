@@ -14,7 +14,8 @@ import type {
   RegisteredNodes,
 } from './LexicalEditor'
 import type { LexicalPrivateDOM, NodeKey, NodeMap } from './LexicalNode'
-import { $isElementNode, type ElementDOMSlot, type ElementNode } from './nodes/LexicalElementNode'
+import { type ElementDOMSlot, type ElementNode } from './nodes/LexicalElementNode' // Type import
+// Value imports for type guards will be moved below
 
 import invariant from 'shared/invariant'
 import normalizeClassNames from 'shared/normalizeClassNames'
@@ -39,10 +40,17 @@ import {
   setMutatedNode,
   setNodeKeyOnDOMNode,
 } from './LexicalUtils'
-import { $isTextNode } from './nodes/LexicalTextNode'
-import { $isDecoratorNode } from './nodes/LexicalDecoratorNode'
-import { $isLineBreakNode } from './nodes/LexicalLineBreakNode'
-import { $isRootNode } from './nodes/LexicalRootNode'
+// import { $isTextNode } from './nodes/LexicalTextNode' // Moved
+// import { $isDecoratorNode } from './nodes/LexicalDecoratorNode' // Moved
+// import { $isLineBreakNode } from './nodes/LexicalLineBreakNode' // Moved
+// import { $isRootNode } from './nodes/LexicalRootNode' // Moved
+import {
+  $isDecoratorNode,
+  $isElementNode,
+  $isLineBreakNode,
+  $isRootNode,
+  $isTextNode
+} from './LexicalNodeChecks' // Corrected path
 
 type IntentionallyMarkedAsDirtyElement = boolean
 

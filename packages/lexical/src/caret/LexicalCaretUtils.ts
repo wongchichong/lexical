@@ -34,12 +34,12 @@ import {
   $setSelection,
   INTERNAL_$isBlock,
 } from '../LexicalUtils';
-import {$isElementNode, type ElementNode} from '../nodes/LexicalElementNode';
+import {type ElementNode} from '../nodes/LexicalElementNode'; // Type import
 import {
   $createTextNode,
-  $isTextNode,
   type TextNode,
-} from '../nodes/LexicalTextNode';
+} from '../nodes/LexicalTextNode'; // Factory and type imports
+import { $isElementNode, $isTextNode } from '../LexicalNodeChecks'; // Value imports
 import {
   $comparePointCaretNext,
   $getAdjacentChildCaret,
