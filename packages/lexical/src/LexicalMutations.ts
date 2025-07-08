@@ -6,8 +6,7 @@
  *
  */
 
-import type { LexicalEditor } from './LexicalEditor'
-import type { EditorState } from './LexicalEditorState'
+import type { LexicalEditor, EditorState } from './LexicalCore'; // UPDATED
 import type { LexicalNode, LexicalPrivateDOM } from './LexicalNode'
 import { $getSelection, $isRangeSelection, type BaseSelection } from './LexicalSelection'
 

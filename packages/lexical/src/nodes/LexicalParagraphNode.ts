@@ -11,13 +11,13 @@ import type {
   KlassConstructor,
   LexicalEditor,
   Spread,
-} from '../LexicalEditor';
+} from '../LexicalCore';
 import type {
   DOMConversionMap,
   DOMConversionOutput,
   DOMExportOutput,
   LexicalNode,
-} from '../LexicalNode';
+} from '../LexicalCore';
 import type {RangeSelection} from '../LexicalSelection';
 import type {
   ElementFormatType,

@@ -6,13 +6,13 @@
  *
  */
 
-import type {DOMConversionMap, NodeKey} from '../LexicalNode';
+import type {DOMConversionMap, NodeKey} from '../LexicalCore';
 
 import invariant from 'shared/invariant';
 
 import {IS_UNMERGEABLE} from '../LexicalConstants';
-import {EditorConfig} from '../LexicalEditor';
-import {LexicalNode} from '../LexicalNode';
+import {EditorConfig} from '../LexicalCore';
+import {LexicalNode} from '../LexicalCore';
 import {$applyNodeReplacement, getCachedClassNameArray} from '../LexicalUtils';
 import {
   SerializedTextNode,

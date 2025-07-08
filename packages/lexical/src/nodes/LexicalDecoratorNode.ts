@@ -12,7 +12,7 @@ import type { EditorConfig } from '../LexicalEditor'
 
 import invariant from 'shared/invariant'
 
-import { LexicalNode } from '../LexicalNode'
+import { LexicalNode } from '../LexicalCore'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface DecoratorNode<T> {

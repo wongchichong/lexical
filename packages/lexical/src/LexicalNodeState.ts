@@ -9,10 +9,11 @@
 import invariant from 'shared/invariant'
 
 import { NODE_STATE_KEY, PROTOTYPE_CONFIG_METHOD } from './LexicalConstants'
-import { errorOnReadOnly } from './LexicalUpdates'
+import { errorOnReadOnly } from './LexicalUpdates'; // Import from LexicalUpdates
+import { Klass, LexicalNodeConfig, Spread } from './LexicalCore' // Keep other imports from LexicalCore
 import { $getEditor, getRegisteredNodeOrThrow, getStaticNodeConfig } from './LexicalUtils'
-import { Klass, LexicalNodeConfig, Spread } from './LexicalEditor'
-import { LexicalNode, StaticNodeConfigRecord } from './LexicalNode'
+// import { Klass, LexicalNodeConfig, Spread } from './LexicalEditor' // Removed
+import { LexicalNode, StaticNodeConfigRecord } from './LexicalCore' // LexicalNode is now from LexicalCore
 
 /**
  * Get the value type (V) from a StateConfig

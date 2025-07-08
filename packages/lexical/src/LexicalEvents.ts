@@ -6,7 +6,7 @@
  *
  */
 
-import type { LexicalEditor } from './LexicalEditor'
+import type { LexicalEditor } from './LexicalCore'; // UPDATED
 import type { NodeKey } from './LexicalNode'
 import { $isElementNode, type ElementNode } from './nodes/LexicalElementNode'
 import { $isTextNode, type TextNode } from './nodes/LexicalTextNode'
@@ -71,7 +71,7 @@ import {
   $isRangeSelection,
   RangeSelection,
 } from './LexicalSelection'
-import { getActiveEditor, updateEditorSync } from './LexicalUpdates'
+import { getActiveEditor, updateEditorSync } from './LexicalUpdates' // UPDATED
 import {
   $findMatchingParent,
   $flushMutations,

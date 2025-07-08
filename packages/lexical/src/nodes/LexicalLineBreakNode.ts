@@ -12,9 +12,9 @@ import type {
   DOMConversionOutput,
   NodeKey,
   SerializedLexicalNode,
-} from '../LexicalNode';
+} from '../LexicalCore';
 
-import {LexicalNode} from '../LexicalNode';
+import {LexicalNode} from '../LexicalCore';
 import {
   $applyNodeReplacement,
   isBlockDomNode,

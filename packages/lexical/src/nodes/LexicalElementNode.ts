@@ -12,7 +12,7 @@ import type {
   LexicalUpdateJSON,
   NodeKey,
   SerializedLexicalNode,
-} from '../LexicalNode'
+} from '../LexicalCore'
 import type {
   BaseSelection,
   PointType,
@@ -36,14 +36,15 @@ import {
   ELEMENT_TYPE_TO_FORMAT,
   TEXT_TYPE_TO_FORMAT,
 } from '../LexicalConstants'
-import { LexicalNode } from '../LexicalNode'
+import { LexicalNode } from '../LexicalCore'
 import {
   $getSelection,
   $internalMakeRangeSelection,
   $isRangeSelection,
   moveSelectionPointToSibling,
 } from '../LexicalSelection'
-import { errorOnReadOnly, getActiveEditor } from '../LexicalUpdates'
+import { errorOnReadOnly, getActiveEditor } from '../LexicalUpdates'; // Import from LexicalUpdates
+import { KlassConstructor, LexicalEditor, Spread } from '../LexicalCore'; // Keep these from LexicalCore
 import {
   $getNodeByKey,
   $isRootOrShadowRoot,
@@ -51,7 +52,7 @@ import {
   removeFromParent,
   toggleTextFormatType,
 } from '../LexicalUtils'
-import { KlassConstructor, LexicalEditor, Spread } from '../LexicalEditor'
+// import { KlassConstructor, LexicalEditor, Spread } from '../LexicalEditor' // Removed, now from LexicalCore
 import { $isTextNode, TextFormatType, TextNode } from './LexicalTextNode'
 
 export type SerializedElementNode<

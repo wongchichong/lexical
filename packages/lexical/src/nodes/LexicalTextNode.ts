@@ -9,10 +9,11 @@
 import type {
   EditorConfig,
   KlassConstructor,
-  LexicalEditor,
   Spread,
   TextNodeThemeClasses,
-} from '../LexicalEditor';
+  // LexicalEditor, // Now from LexicalCore
+} from '../LexicalCore'; // Changed LexicalEditor to LexicalCore
+import type { LexicalEditor } from '../LexicalCore'; // Explicit import for LexicalEditor type
 import type {
   DOMConversionMap,
   DOMConversionOutput,
@@ -20,7 +21,7 @@ import type {
   LexicalUpdateJSON,
   NodeKey,
   SerializedLexicalNode,
-} from '../LexicalNode';
+} from '../LexicalCore';
 import type {
   BaseSelection,
   RangeSelection,
@@ -50,7 +51,7 @@ import {
   TEXT_TYPE_TO_FORMAT,
   TEXT_TYPE_TO_MODE,
 } from '../LexicalConstants';
-import {LexicalNode} from '../LexicalNode';
+import {LexicalNode} from '../LexicalCore';
 import {$cloneNodeState} from '../LexicalNodeState';
 import {
   $getSelection,
@@ -59,7 +60,7 @@ import {
   $updateElementSelectionOnCreateDeleteNode,
   adjustPointOffsetForMergedSibling,
 } from '../LexicalSelection';
-import {errorOnReadOnly} from '../LexicalUpdates';
+import {errorOnReadOnly} from '../LexicalUpdates'; // Changed import path to LexicalUpdates
 import {
   $applyNodeReplacement,
   $getCompositionKey,

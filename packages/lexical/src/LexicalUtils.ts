@@ -18,8 +18,10 @@ import type {
   RegisteredNode,
   RegisteredNodes,
   Spread,
-} from './LexicalEditor'
-import type { EditorState } from './LexicalEditorState'
+  LexicalEditor, // Class from LexicalCore
+  // EditorState will also come from LexicalCore
+} from './LexicalCore'; // UPDATED
+import type { EditorState } from './LexicalCore'; // UPDATED
 import {
   $getPreviousSelection,
   $getSelection,
@@ -64,7 +66,7 @@ import {
   RTL_REGEX,
   TEXT_TYPE_TO_FORMAT,
 } from './LexicalConstants'
-import { LexicalEditor } from './LexicalEditor'
+// import { LexicalEditor } from './LexicalEditor' // Now from LexicalCore
 import { flushRootMutations } from './LexicalMutations'
 import {
   LexicalNode,
@@ -72,7 +74,7 @@ import {
   type NodeKey,
   type NodeMap,
   type StaticNodeConfigValue,
-} from './LexicalNode'
+} from './LexicalCore'
 import { $normalizeSelection } from './LexicalNormalization'
 import {
   errorOnInfiniteTransforms,
@@ -81,8 +83,8 @@ import {
   getActiveEditorState,
   internalGetActiveEditorState,
   isCurrentlyReadOnlyMode,
-  triggerCommandListeners,
-} from './LexicalUpdates'
+  // triggerCommandListeners, // This is likely from LexicalEvents or directly used by editor.dispatchCommand
+} from './LexicalUpdates'; // UPDATED to LexicalUpdates
 import { $createTextNode, $isTextNode, type TextFormatType, TextNode } from './nodes/LexicalTextNode'
 import { $isDecoratorNode, DecoratorNode } from './nodes/LexicalDecoratorNode'
 import { $isElementNode, ElementNode } from './nodes/LexicalElementNode'

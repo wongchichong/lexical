@@ -128,67 +128,10 @@ export {
   NODE_STATE_KEY,
   TEXT_TYPE_TO_FORMAT,
 } from './LexicalConstants'
-export type {
-  CommandListener,
-  CommandListenerPriority,
-  CommandPayloadType,
-  CreateEditorArgs,
-  EditableListener,
-  EditorConfig,
-  EditorSetOptions,
-  EditorThemeClasses,
-  EditorThemeClassName,
-  EditorUpdateOptions,
-  HTMLConfig,
-  Klass,
-  KlassConstructor,
-  LexicalCommand,
-  LexicalEditor,
-  LexicalNodeConfig,
-  LexicalNodeReplacement,
-  MutationListener,
-  NodeMutation,
-  RootListener,
-  SerializedEditor,
-  Spread,
-  Transform,
-  UpdateListener,
-  UpdateListenerPayload,
-} from './LexicalEditor'
-export {
-  COMMAND_PRIORITY_CRITICAL,
-  COMMAND_PRIORITY_EDITOR,
-  COMMAND_PRIORITY_HIGH,
-  COMMAND_PRIORITY_LOW,
-  COMMAND_PRIORITY_NORMAL,
-  createEditor,
-} from './LexicalEditor'
-export type {
-  EditorState,
-  EditorStateReadOptions,
-  SerializedEditorState,
-} from './LexicalEditorState'
+// LexicalEditor, LexicalEditorState, LexicalUpdates exports will be replaced by LexicalCore exports
 export type { EventHandler } from './LexicalEvents'
-export type {
-  BaseStaticNodeConfig,
-  DOMChildConversion,
-  DOMConversion,
-  DOMConversionFn,
-  DOMConversionMap,
-  DOMConversionOutput,
-  DOMExportOutput,
-  DOMExportOutputMap,
-  LexicalExportJSON,
-  LexicalNode,
-  LexicalUpdateJSON,
-  NodeKey,
-  NodeMap,
-  SerializedLexicalNode,
-  StaticNodeConfig,
-  StaticNodeConfigRecord,
-  StaticNodeConfigValue,
-} from './LexicalNode'
-export { buildImportMap } from './LexicalNode'
+// LexicalNode exports are now part of LexicalCore
+// import './LexicalNodeMethods'; // No longer needed as methods are in LexicalNode class within LexicalCore
 export {
   $getState,
   $getStateChange,
@@ -229,7 +172,86 @@ export {
   $isNodeSelection,
   $isRangeSelection,
 } from './LexicalSelection'
-export { $parseSerializedNode, isCurrentlyReadOnlyMode } from './LexicalUpdates'
+// LexicalUpdates exports will be replaced by LexicalCore exports
+export {
+  // Exports from LexicalCore that were previously in LexicalEditor, LexicalEditorState, LexicalUpdates
+  // Types from LexicalEditor
+  type CommandListener,
+  type CommandListenerPriority,
+  type CommandPayloadType,
+  type CreateEditorArgs,
+  type EditableListener,
+  type EditorConfig,
+  type EditorSetOptions,
+  type EditorThemeClasses,
+  type EditorThemeClassName,
+  type EditorUpdateOptions,
+  type HTMLConfig,
+  type Klass,
+  type KlassConstructor,
+  type LexicalCommand,
+  type LexicalEditor,
+  type LexicalNodeConfig,
+  type LexicalNodeReplacement,
+  type MutationListener,
+  type NodeMutation,
+  type RootListener,
+  type SerializedEditor,
+  type Spread,
+  type Transform,
+  type UpdateListener,
+  type UpdateListenerPayload,
+  // Values from LexicalEditor
+  COMMAND_PRIORITY_CRITICAL,
+  COMMAND_PRIORITY_EDITOR,
+  COMMAND_PRIORITY_HIGH,
+  COMMAND_PRIORITY_LOW,
+  COMMAND_PRIORITY_NORMAL,
+  createEditor,
+  // Types from LexicalEditorState
+  type EditorState,
+  type EditorStateReadOptions,
+  type SerializedEditorState,
+  // Values from LexicalEditorState
+  createEmptyEditorState,
+  cloneEditorState,
+  editorStateHasDirtySelection,
+  // Values from LexicalUpdates (now in LexicalCore)
+  $parseSerializedNode, // This is also a fn in LexicalCore from LexicalNode part, ensure no clash or correct one is exported
+  isCurrentlyReadOnlyMode,
+  errorOnReadOnly,
+  errorOnInfiniteTransforms,
+  getActiveEditorState,
+  getActiveEditor,
+  updateEditor,
+  updateEditorSync,
+  // Exports from LexicalNode (now in LexicalCore)
+  LexicalNode, // Class
+  buildImportMap, // Function
+  insertRangeAfter, // Function from LexicalNode.ts file
+  // Potentially more functions from LexicalUpdates that were public but not re-exported by index.ts
+  // For now, these are the main ones explicitly mentioned or implied.
+  // Types from LexicalNode (now in LexicalCore) - add to the type export block below
+} from './LexicalCore'
+export type { // Extend this block with LexicalNode types
+  BaseStaticNodeConfig,
+  DOMChildConversion,
+  DOMConversion,
+  DOMConversionFn,
+  DOMConversionMap,
+  DOMConversionOutput,
+  DOMExportOutput,
+  DOMExportOutputMap,
+  LexicalExportJSON,
+  // LexicalNode type already handled by class export, but if it was a separate type: type LexicalNode,
+  LexicalUpdateJSON,
+  NodeKey,
+  NodeMap,
+  SerializedLexicalNode,
+  StaticNodeConfig,
+  StaticNodeConfigRecord,
+  StaticNodeConfigValue,
+} from './LexicalCore'; // Pointing to LexicalCore for these types
 export {
   $addUpdateTag,
   $applyNodeReplacement,
